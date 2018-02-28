@@ -1,0 +1,320 @@
+[gd_scene load_steps=8 format=2]
+
+[ext_resource path="res://scn/Player.tscn" type="PackedScene" id=1]
+[ext_resource path="res://scn/Player.gd" type="Script" id=2]
+[ext_resource path="res://mesh/fx/Fireball.tscn" type="PackedScene" id=3]
+[ext_resource path="res://mesh/rooms/Room01.tscn" type="PackedScene" id=4]
+[ext_resource path="res://mesh/rooms/Corridor01.tscn" type="PackedScene" id=5]
+[ext_resource path="res://mesh/rooms/Wall01.tscn" type="PackedScene" id=6]
+[ext_resource path="res://mesh/rooms/Wall02.tscn" type="PackedScene" id=7]
+
+[node name="dungeon_test_01" type="Node" index="0"]
+
+[node name="Player" parent="." index="0" instance=ExtResource( 1 )]
+
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 2, 4 )
+script = ExtResource( 2 )
+_sections_unfolded = [ "Transform" ]
+FIREBALL = ExtResource( 3 )
+SPEED = 600
+GRAVITY = -9.8
+LOOK_SENSITIVITY = 0.05
+CAM_DIST = 4.0
+CAM_OFFSET = 3.0
+INVERT_LOOK = false
+
+[node name="OmniLight" type="OmniLight" parent="Player" index="2"]
+
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0 )
+layers = 1
+light_color = Color( 1, 0.994751, 0.664063, 1 )
+light_energy = 5.0
+light_indirect_energy = 5.0
+light_negative = false
+light_specular = 0.5
+light_bake_mode = 1
+light_cull_mask = -1
+shadow_enabled = true
+shadow_color = Color( 0, 0, 0, 1 )
+shadow_bias = 0.15
+shadow_contact = 0.0
+shadow_reverse_cull_face = false
+editor_only = false
+omni_range = 10.0
+omni_attenuation = 1.0
+omni_shadow_mode = 1
+omni_shadow_detail = 1
+_sections_unfolded = [ "Light", "Omni", "Shadow", "Transform" ]
+
+[node name="Rooms" type="Spatial" parent="." index="1"]
+
+editor/display_folded = true
+
+[node name="Room01" parent="Rooms" index="0" instance=ExtResource( 4 )]
+
+[node name="Corridor01" parent="Rooms" index="1" instance=ExtResource( 5 )]
+
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 20 )
+
+[node name="Room02" parent="Rooms" index="2" instance=ExtResource( 4 )]
+
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 40 )
+
+[node name="Corridor02" parent="Rooms" index="3" instance=ExtResource( 5 )]
+
+transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 20, 0, 0 )
+_sections_unfolded = [ "Transform" ]
+
+[node name="Room03" parent="Rooms" index="4" instance=ExtResource( 4 )]
+
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 40, 0, 0 )
+
+[node name="Room04" parent="Rooms" index="5" instance=ExtResource( 4 )]
+
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 40, 0, -20 )
+
+[node name="Room05" parent="Rooms" index="6" instance=ExtResource( 4 )]
+
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, -40 )
+
+[node name="Corridor03" parent="Rooms" index="7" instance=ExtResource( 5 )]
+
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 40, 0, -40 )
+
+[node name="Corridor04" parent="Rooms" index="8" instance=ExtResource( 5 )]
+
+transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 26, 0, -40 )
+_sections_unfolded = [ "Transform" ]
+
+[node name="Room06" parent="Rooms" index="9" instance=ExtResource( 4 )]
+
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -14, 0, -31 )
+
+[node name="Walls" type="Spatial" parent="." index="2"]
+
+editor/display_folded = true
+
+[node name="Wall01" parent="Walls" index="0" instance=ExtResource( 6 )]
+
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 0, 0 )
+
+[node name="Wall02" parent="Walls" index="1" instance=ExtResource( 6 )]
+
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0, 20 )
+
+[node name="Wall03" parent="Walls" index="2" instance=ExtResource( 6 )]
+
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, 20 )
+
+[node name="Wall04" parent="Walls" index="3" instance=ExtResource( 7 )]
+
+transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 6, 2, 10 )
+
+[node name="Wall05" parent="Walls" index="4" instance=ExtResource( 7 )]
+
+transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -6, 2, 10 )
+
+[node name="Wall06" parent="Walls" index="5" instance=ExtResource( 6 )]
+
+transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, -10 )
+_sections_unfolded = [ "Transform" ]
+
+[node name="Wall07" parent="Walls" index="6" instance=ExtResource( 7 )]
+
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 2, -6 )
+
+[node name="Wall08" parent="Walls" index="7" instance=ExtResource( 7 )]
+
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 2, 6 )
+
+[node name="Wall09" parent="Walls" index="8" instance=ExtResource( 6 )]
+
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 0, 40 )
+
+[node name="Wall10" parent="Walls" index="9" instance=ExtResource( 6 )]
+
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 0, 40 )
+
+[node name="Wall11" parent="Walls" index="10" instance=ExtResource( 7 )]
+
+transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 6, 2, 30 )
+
+[node name="Wall12" parent="Walls" index="11" instance=ExtResource( 7 )]
+
+transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -6, 2, 30 )
+
+[node name="Wall13" parent="Walls" index="12" instance=ExtResource( 6 )]
+
+transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, 50 )
+_sections_unfolded = [ "Transform" ]
+
+[node name="Wall14" parent="Walls" index="13" instance=ExtResource( 6 )]
+
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 50, 0, 0 )
+_sections_unfolded = [ "Transform" ]
+
+[node name="Wall15" parent="Walls" index="14" instance=ExtResource( 6 )]
+
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 50, 0, -20 )
+
+[node name="Wall16" parent="Walls" index="15" instance=ExtResource( 6 )]
+
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 30, 0, -20 )
+
+[node name="Wall17" parent="Walls" index="16" instance=ExtResource( 7 )]
+
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 30, 2, -6 )
+
+[node name="Wall18" parent="Walls" index="17" instance=ExtResource( 7 )]
+
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 30, 2, 6 )
+
+[node name="Wall19" parent="Walls" index="18" instance=ExtResource( 6 )]
+
+transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 40, 0, 10 )
+_sections_unfolded = [ "Transform" ]
+
+[node name="Wall20" parent="Walls" index="19" instance=ExtResource( 7 )]
+
+transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 34, 2, -30 )
+
+[node name="Wall21" parent="Walls" index="20" instance=ExtResource( 7 )]
+
+transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 46, 2, -30 )
+
+[node name="Wall22" parent="Walls" index="21" instance=ExtResource( 6 )]
+
+transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 20, 0, 4 )
+_sections_unfolded = [ "Transform" ]
+
+[node name="Wall23" parent="Walls" index="22" instance=ExtResource( 7 )]
+
+transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 14, 2, -4 )
+
+[node name="Wall24" parent="Walls" index="23" instance=ExtResource( 7 )]
+
+transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 26, 2, -4 )
+
+[node name="Wall25" parent="Walls" index="24" instance=ExtResource( 6 )]
+
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 44, 0, -40 )
+_sections_unfolded = [ "Transform" ]
+
+[node name="Wall26" parent="Walls" index="25" instance=ExtResource( 6 )]
+
+transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 6, 0, -30 )
+_sections_unfolded = [ "Transform" ]
+
+[node name="Wall27" parent="Walls" index="26" instance=ExtResource( 6 )]
+
+transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 26, 0, -44 )
+_sections_unfolded = [ "Transform" ]
+
+[node name="Wall28" parent="Walls" index="27" instance=ExtResource( 7 )]
+
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 36, 2, -34 )
+
+[node name="Wall29" parent="Walls" index="28" instance=ExtResource( 7 )]
+
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 36, 2, -46 )
+
+[node name="Wall30" parent="Walls" index="29" instance=ExtResource( 7 )]
+
+transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 40, 2, -50 )
+
+[node name="Wall31" parent="Walls" index="30" instance=ExtResource( 6 )]
+
+transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 26, 0, -36 )
+_sections_unfolded = [ "Transform" ]
+
+[node name="Wall32" parent="Walls" index="31" instance=ExtResource( 7 )]
+
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 16, 2, -34 )
+
+[node name="Wall33" parent="Walls" index="32" instance=ExtResource( 7 )]
+
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 16, 2, -46 )
+
+[node name="Wall34" parent="Walls" index="33" instance=ExtResource( 6 )]
+
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -24, 0, -31 )
+
+[node name="Wall35" parent="Walls" index="34" instance=ExtResource( 6 )]
+
+transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 6, 0, -49 )
+_sections_unfolded = [ "Transform" ]
+
+[node name="Wall36" parent="Walls" index="35" instance=ExtResource( 7 )]
+
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 2, -45 )
+
+[node name="Wall37" parent="Walls" index="36" instance=ExtResource( 7 )]
+
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 2, -26 )
+
+[node name="Wall38" parent="Walls" index="37" instance=ExtResource( 6 )]
+
+transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -14, 0, -22 )
+_sections_unfolded = [ "Transform" ]
+
+[node name="Wall39" parent="Walls" index="38" instance=ExtResource( 6 )]
+
+transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -14, 0, -41 )
+_sections_unfolded = [ "Transform" ]
+
+[node name="CameraTarget" type="Spatial" parent="." index="3"]
+
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 2, 4 )
+_sections_unfolded = [ "Transform" ]
+
+[node name="Camera" type="Camera" parent="CameraTarget" index="0"]
+
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 4 )
+keep_aspect = 1
+cull_mask = 1048575
+environment = null
+h_offset = 0.0
+v_offset = 0.0
+doppler_tracking = 0
+projection = 0
+current = false
+fov = 70.0
+size = 1.0
+near = 0.05
+far = 100.0
+_sections_unfolded = [ "Transform" ]
+
+[node name="ShotOrigin" type="Spatial" parent="CameraTarget" index="1"]
+
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2 )
+_sections_unfolded = [ "Transform" ]
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." index="4"]
+
+layer = 1
+offset = Vector2( 0, 0 )
+rotation = 0.0
+scale = Vector2( 1, 1 )
+transform = Transform2D( 1, 0, 0, 1, 0, 0 )
+
+[node name="Node2D" type="Node2D" parent="CanvasLayer" index="0"]
+
+[node name="FpsLabel" type="Label" parent="CanvasLayer/Node2D" index="0"]
+
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_right = 40.0
+margin_bottom = 14.0
+rect_pivot_offset = Vector2( 0, 0 )
+mouse_filter = 2
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 4
+text = "jadda"
+percent_visible = 1.0
+lines_skipped = 0
+max_lines_visible = -1
+
+
