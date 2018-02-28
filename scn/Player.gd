@@ -15,7 +15,10 @@ var camera
 var cameraTarget
 var shotOrigin
 var velocity = Vector3()
-var lastMouseMove = Vector2(0,0)
+var lastMousePos = Vector2(0,0)
+var mouseMove = Vector2(0,0)
+var mouseScrollUp = false
+var mouseScrollDown = false
 var targetCamYRot
 var targetCamXRot
 var networkInfo
@@ -28,26 +31,23 @@ func _ready():
 	targetCamXRot = 0.0
 	
 	networkInfo = '\n[not connected]'
+	get_tree().set_meta('network_peer', false)
 
 func _physics_process(delta):
 	var move = Vector3()
 	var gravity = GRAVITY
 	
-	if (Input.is_action_pressed('ui_page_up')):
-		CAM_DIST -= 1.0 * delta
-	if (Input.is_action_pressed('ui_page_down')):
-		CAM_DIST += 1.0 * delta
+	if mouseScrollUp:
+		CAM_DIST -= 20.0 * delta
+	if mouseScrollDown:
+		CAM_DIST += 20.0 * delta
 	
 	CAM_DIST = clamp(CAM_DIST, 3.0, 10.0)
 	
-	var mouseMove = Input.get_last_mouse_speed()
-	if (mouseMove.x != lastMouseMove.x):
-		lastMouseMove.x = mouseMove.x
-		targetCamYRot = cameraTarget.rotation.y + (-mouseMove.x * LOOK_SENSITIVITY * delta)
-	if (mouseMove.y != lastMouseMove.y):
-		lastMouseMove.y = mouseMove.y
-		var my = -mouseMove.y if INVERT_LOOK else mouseMove.y
-		targetCamXRot = cameraTarget.rotation.x + (my * LOOK_SENSITIVITY * delta)
+	targetCamYRot = cameraTarget.rotation.y + (-mouseMove.x * LOOK_SENSITIVITY * delta)
+	var my = mouseMove.y if INVERT_LOOK else -mouseMove.y
+	targetCamXRot = cameraTarget.rotation.x + (my * LOOK_SENSITIVITY * delta)
+	
 	cameraTarget.rotation.y = lerp(cameraTarget.rotation.y, targetCamYRot, 0.2)
 	cameraTarget.rotation.x = clamp(lerp(cameraTarget.rotation.x, targetCamXRot, 0.2), -0.9, -0.15)
 
@@ -63,14 +63,14 @@ func _physics_process(delta):
 	move = move.normalized()
 	move = move * SPEED * delta
 	
-	if (Input.is_action_just_pressed("ui_cancel")):
+	if (Input.is_action_just_pressed('player_attack')):
 		var fireball = FIREBALL.instance()
 		get_parent().add_child(fireball)
-		fireball.translation = cameraTarget.translation + shotOrigin.translation
+		fireball.translation = translation + shotOrigin.translation
 		var dir = cameraTarget.rotation
-		dir.x = 0
-		fireball.rotation = dir
-		fireball.apply_impulse(shotOrigin.translation, dir.normalized() * 10)
+		#dir.x = 0
+		fireball.rotation = dir.normalized()
+		fireball.apply_impulse(translation + shotOrigin.translation, dir.normalized() * 10)
 	
 	if (Input.is_action_just_released('net_start_server')):
 		NetworkStartServer()
@@ -105,6 +105,21 @@ func _physics_process(delta):
 	
 	$"../CanvasLayer/Node2D/FpsLabel".text = 'fps: ' + str(Engine.get_frames_per_second()) + '\ncam_dist: ' + str(CAM_DIST) + networkInfo
 	
+	# clear input stuffs
+	mouseMove = Vector2(0,0)
+	mouseScrollUp = false
+	mouseScrollDown = false
+
+func _input(event):
+	if event is InputEventMouse:
+		mouseMove = event.position - lastMousePos
+		lastMousePos = event.position
+	if event is InputEventMouseButton:
+		if event.button_index == BUTTON_WHEEL_UP:
+			mouseScrollUp = true
+		if event.button_index == BUTTON_WHEEL_DOWN:
+			mouseScrollDown = true
+
 func _notification(what):
 	if what == MainLoop.NOTIFICATION_WM_QUIT_REQUEST:
 		get_tree().set_network_peer(null) # shutdown network
