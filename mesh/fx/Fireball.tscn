@@ -1,6 +1,8 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=12 format=2]
 
-[sub_resource type="SpatialMaterial" id=7]
+[ext_resource path="res://mesh/fx/Fireball.gd" type="Script" id=1]
+
+[sub_resource type="SpatialMaterial" id=1]
 
 render_priority = 0
 flags_transparent = false
@@ -56,20 +58,44 @@ proximity_fade_enable = false
 distance_fade_enable = false
 _sections_unfolded = [ "Emission" ]
 
-[sub_resource type="SphereMesh" id=8]
+[sub_resource type="SphereMesh" id=2]
 
-material = SubResource( 7 )
-radius = 1.0
-height = 2.0
+material = SubResource( 1 )
+radius = 0.3
+height = 0.8
 radial_segments = 64
 rings = 32
 is_hemisphere = false
 
-[sub_resource type="SphereShape" id=9]
+[sub_resource type="SphereShape" id=3]
 
-radius = 1.0
+radius = 0.3
 
-[sub_resource type="ParticlesMaterial" id=4]
+[sub_resource type="Gradient" id=4]
+
+offsets = PoolRealArray( 0, 0.00591716, 0.976331 )
+colors = PoolColorArray( 0, 0, 0, 1, 0.980469, 0.422492, 0.0153198, 1, 0.144531, 0.144531, 0.144531, 1 )
+
+[sub_resource type="GradientTexture" id=5]
+
+flags = 4
+gradient = SubResource( 4 )
+width = 2048
+
+[sub_resource type="Curve" id=6]
+
+min_value = 0.0
+max_value = 1.0
+bake_resolution = 100
+_data = [ Vector2( 0, 1 ), 0.0, 0.0, 0, 0, Vector2( 0.999197, 0 ), 0.221103, 0.0, 0, 0 ]
+
+[sub_resource type="CurveTexture" id=7]
+
+flags = 4
+width = 2048
+curve = SubResource( 6 )
+
+[sub_resource type="ParticlesMaterial" id=8]
 
 render_priority = 0
 trail_divisor = 1
@@ -94,9 +120,10 @@ damping = 0.0
 damping_random = 0.0
 angle = 0.0
 angle_random = 0.0
-scale = 0.8
+scale = 0.6
 scale_random = 1.0
-color = Color( 1, 1, 1, 1 )
+scale_curve = SubResource( 7 )
+color_ramp = SubResource( 5 )
 hue_variation = 0.0
 hue_variation_random = 0.0
 anim_speed = 0.0
@@ -104,9 +131,9 @@ anim_speed_random = 0.0
 anim_offset = 0.0
 anim_offset_random = 0.0
 anim_loop = false
-_sections_unfolded = [ "Angle", "Scale" ]
+_sections_unfolded = [ "Angle", "Color", "Scale" ]
 
-[sub_resource type="SpatialMaterial" id=5]
+[sub_resource type="SpatialMaterial" id=9]
 
 render_priority = 0
 flags_transparent = false
@@ -135,11 +162,7 @@ metallic_specular = 0.5
 metallic_texture_channel = 0
 roughness = 0.0
 roughness_texture_channel = 0
-emission_enabled = true
-emission = Color( 0.871094, 0.269452, 0.0340271, 1 )
-emission_energy = 1.0
-emission_operator = 0
-emission_on_uv2 = false
+emission_enabled = false
 normal_enabled = false
 rim_enabled = false
 clearcoat_enabled = false
@@ -162,11 +185,11 @@ proximity_fade_enable = false
 distance_fade_enable = false
 _sections_unfolded = [ "Albedo", "Emission" ]
 
-[sub_resource type="SphereMesh" id=6]
+[sub_resource type="SphereMesh" id=10]
 
-material = SubResource( 5 )
-radius = 1.0
-height = 1.5
+material = SubResource( 9 )
+radius = 0.4
+height = 0.6
 radial_segments = 64
 rings = 32
 is_hemisphere = false
@@ -199,6 +222,7 @@ linear_velocity = Vector3( 0, 0, 0 )
 linear_damp = -1.0
 angular_velocity = Vector3( 0, 0, 0 )
 angular_damp = -1.0
+script = ExtResource( 1 )
 
 [node name="MeshInstance" type="MeshInstance" parent="." index="0"]
 
@@ -211,13 +235,13 @@ lod_min_distance = 0.0
 lod_min_hysteresis = 0.0
 lod_max_distance = 0.0
 lod_max_hysteresis = 0.0
-mesh = SubResource( 8 )
+mesh = SubResource( 2 )
 skeleton = NodePath("..")
 material/0 = null
 
 [node name="CollisionShape" type="CollisionShape" parent="." index="1"]
 
-shape = SubResource( 9 )
+shape = SubResource( 3 )
 disabled = false
 
 [node name="Particles" type="Particles" parent="." index="2"]
@@ -233,7 +257,7 @@ lod_max_distance = 0.0
 lod_max_hysteresis = 0.0
 emitting = true
 amount = 20
-lifetime = 3.0
+lifetime = 0.6
 one_shot = false
 preprocess = 0.0
 speed_scale = 1.0
@@ -244,9 +268,17 @@ fract_delta = true
 visibility_aabb = AABB( -4, -4, -4, 8, 8, 8 )
 local_coords = false
 draw_order = 0
-process_material = SubResource( 4 )
+process_material = SubResource( 8 )
 draw_passes = 1
-draw_pass_1 = SubResource( 6 )
-_sections_unfolded = [ "Draw Passes", "Drawing", "Process Material" ]
+draw_pass_1 = SubResource( 10 )
+_sections_unfolded = [ "Draw Passes", "Drawing", "Process Material", "Time" ]
+
+[connection signal="body_entered" from="." to="." method="_on_Fireball_body_entered"]
+
+[connection signal="body_exited" from="." to="." method="_on_Fireball_body_entered"]
+
+[connection signal="body_shape_entered" from="." to="." method="_on_Fireball_body_entered"]
+
+[connection signal="body_shape_exited" from="." to="." method="_on_Fireball_body_entered"]
 
 

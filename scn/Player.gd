@@ -8,6 +8,7 @@ export (float) var CAM_DIST
 export (float) var CAM_OFFSET
 export (bool) var INVERT_LOOK
 
+const V2_ZERO = Vector2(0,0)
 const V3_ZERO = Vector3(0,0,0)
 const V3_UP = Vector3(0,1,0)
 
@@ -44,12 +45,25 @@ func _physics_process(delta):
 	
 	CAM_DIST = clamp(CAM_DIST, 3.0, 10.0)
 	
-	targetCamYRot = cameraTarget.rotation.y + (-mouseMove.x * LOOK_SENSITIVITY * delta)
-	var my = mouseMove.y if INVERT_LOOK else -mouseMove.y
-	targetCamXRot = cameraTarget.rotation.x + (my * LOOK_SENSITIVITY * delta)
+	# camera stuffs, stick overrides mouse
+	if mouseMove != V2_ZERO:
+		targetCamYRot = cameraTarget.rotation.y + (-mouseMove.x * LOOK_SENSITIVITY * delta)
+		var my = mouseMove.y if INVERT_LOOK else -mouseMove.y
+		targetCamXRot = cameraTarget.rotation.x + (my * LOOK_SENSITIVITY * delta)
+	
+	#stick follows
+	if (Input.is_action_pressed('cam_right')):
+		targetCamYRot = cameraTarget.rotation.y - (LOOK_SENSITIVITY * delta)
+	if (Input.is_action_pressed('cam_left')):
+		targetCamYRot = cameraTarget.rotation.y + (LOOK_SENSITIVITY * delta)
+	var camStickAdjust = -(LOOK_SENSITIVITY * delta) if INVERT_LOOK else LOOK_SENSITIVITY * delta
+	if (Input.is_action_pressed('cam_up')):
+		targetCamXRot = cameraTarget.rotation.x + camStickAdjust
+	if (Input.is_action_pressed('cam_down')):
+		targetCamXRot = cameraTarget.rotation.x - camStickAdjust
 	
 	cameraTarget.rotation.y = lerp(cameraTarget.rotation.y, targetCamYRot, 0.2)
-	cameraTarget.rotation.x = clamp(lerp(cameraTarget.rotation.x, targetCamXRot, 0.2), -0.9, -0.15)
+	cameraTarget.rotation.x = clamp(lerp(cameraTarget.rotation.x, targetCamXRot, 0.2), -1.0, 0.1)
 
 	var cam_transform = camera.get_global_transform()
 	if (Input.is_action_pressed("ui_up")):
@@ -66,11 +80,9 @@ func _physics_process(delta):
 	if (Input.is_action_just_pressed('player_attack')):
 		var fireball = FIREBALL.instance()
 		get_parent().add_child(fireball)
-		fireball.translation = translation + shotOrigin.translation
-		var dir = cameraTarget.rotation
-		#dir.x = 0
-		fireball.rotation = dir.normalized()
-		fireball.apply_impulse(translation + shotOrigin.translation, dir.normalized() * 10)
+		fireball.set_transform(shotOrigin.get_global_transform().orthonormalized())
+		fireball.set_linear_velocity(shotOrigin.get_global_transform().basis[2].normalized()*20)
+		fireball.add_collision_exception_with(self)
 	
 	if (Input.is_action_just_released('net_start_server')):
 		NetworkStartServer()
