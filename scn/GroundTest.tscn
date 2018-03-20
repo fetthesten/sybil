@@ -31,6 +31,7 @@ _sections_unfolded = [ "Transform" ]
 
 [node name="StaticBody" type="StaticBody" parent="MeshInstance" index="0"]
 
+transform = Transform( 100, 0, 0, 0, 1, 0, 0, 0, 100, 0, 0, 0 )
 input_ray_pickable = true
 input_capture_on_drag = false
 collision_layer = 1
@@ -39,6 +40,7 @@ friction = 1.0
 bounce = 0.0
 constant_linear_velocity = Vector3( 0, 0, 0 )
 constant_angular_velocity = Vector3( 0, 0, 0 )
+_sections_unfolded = [ "Collision", "Transform" ]
 
 [node name="CollisionShape" type="CollisionShape" parent="MeshInstance/StaticBody" index="0"]
 
@@ -48,5 +50,8 @@ disabled = false
 [node name="CarPlayerTest" parent="." index="1" instance=ExtResource( 1 )]
 
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0 )
+SPEED = 600
+
+[connection signal="input_event" from="MeshInstance/StaticBody" to="CarPlayerTest" method="_on_mouseAimGround"]
 
 

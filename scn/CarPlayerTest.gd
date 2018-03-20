@@ -2,62 +2,36 @@ extends KinematicBody
 
 export (PackedScene) var FIREBALL
 export (int) var SPEED
-export (float) var LOOK_SENSITIVITY
-export (float) var CAM_DIST
-export (float) var CAM_OFFSET
-export (bool) var INVERT_LOOK
 
 const V2_ZERO = Vector2(0,0)
 const V3_ZERO = Vector3(0,0,0)
 const V3_UP = Vector3(0,1,0)
+const V3_FORWARD = Vector3(0,0,1)
+const V3_LEFT = Vector3(1,0,0)
 
 var camera
 var cameraTarget
+var cameraOffset
 var shotOrigin
+var anchor
 var velocity = Vector3()
 var lastMousePos = Vector2(0,0)
+var mouseWorldPos = Vector3(0,0,0)
 var mouseMove = Vector2(0,0)
 var mouseScrollUp = false
 var mouseScrollDown = false
-var targetCamYRot
-var targetCamXRot
 
 func _ready():
-	camera = $"Anchor/Camera"
-	cameraTarget = $"Anchor/CameraTarget"
+	camera = $"Camera"
+	cameraTarget = $"CameraTarget"
+	cameraOffset = Vector3(0,12,5)
+	camera.rotate_x(-45)
+	
 	shotOrigin = $"Anchor/ShotOrigin"
-	targetCamYRot = 0.0
-	targetCamXRot = 0.0
+	anchor = $"Anchor"
 
 func _physics_process(delta):
 	var move = Vector3()
-	
-#	if mouseScrollUp:
-#		CAM_DIST -= 20.0 * delta
-#	if mouseScrollDown:
-#		CAM_DIST += 20.0 * delta
-#
-#	CAM_DIST = clamp(CAM_DIST, 3.0, 10.0)
-	
-	# camera stuffs, stick overrides mouse
-	if mouseMove != V2_ZERO:
-		targetCamYRot = cameraTarget.rotation.y + (-mouseMove.x * LOOK_SENSITIVITY * delta)
-		var my = mouseMove.y if INVERT_LOOK else -mouseMove.y
-		targetCamXRot = cameraTarget.rotation.x + (my * LOOK_SENSITIVITY * delta)
-	
-	#stick follows
-	if (Input.is_action_pressed('cam_right')):
-		targetCamYRot = cameraTarget.rotation.y - (LOOK_SENSITIVITY * delta)
-	if (Input.is_action_pressed('cam_left')):
-		targetCamYRot = cameraTarget.rotation.y + (LOOK_SENSITIVITY * delta)
-	var camStickAdjust = -(LOOK_SENSITIVITY * delta) if INVERT_LOOK else LOOK_SENSITIVITY * delta
-	if (Input.is_action_pressed('cam_up')):
-		targetCamXRot = cameraTarget.rotation.x + camStickAdjust
-	if (Input.is_action_pressed('cam_down')):
-		targetCamXRot = cameraTarget.rotation.x - camStickAdjust
-	
-	cameraTarget.rotation.y = lerp(cameraTarget.rotation.y, targetCamYRot, 0.2)
-	cameraTarget.rotation.x = clamp(lerp(cameraTarget.rotation.x, targetCamXRot, 0.2), -1.0, 0.1)
 
 	var cam_transform = camera.get_global_transform()
 	if (Input.is_action_pressed("ui_up")):
@@ -82,11 +56,13 @@ func _physics_process(delta):
 	velocity.z = move.z
 	
 	velocity = move_and_slide(velocity, V3_UP)
-	#var camOffset = translation
-	#camOffset.y += CAM_OFFSET
-	#cameraTarget.translation = camOffset
-	#camera.translation.z = CAM_DIST
+	camera.translation = cameraOffset
 	
+	# test move sight
+	#print(lastMousePos)
+	var anchorPos = mouseWorldPos
+	anchorPos.y = 0.1
+	anchor.look_at(anchorPos, V3_UP)
 	#$"../CanvasLayer/Node2D/FpsLabel".text = 'fps: ' + str(Engine.get_frames_per_second()) + '\ncam_dist: ' + str(CAM_DIST)
 	
 	# clear input stuffs
@@ -107,3 +83,6 @@ func _input(event):
 func _notification(what):
 	if what == MainLoop.NOTIFICATION_WM_QUIT_REQUEST:
 		get_tree().quit()
+
+func _on_mouseAimGround(camera, event, click_position, click_normal, shape_idx):
+	mouseWorldPos = click_position

@@ -69,7 +69,7 @@ subdivide_width = 0
 subdivide_height = 0
 subdivide_depth = 0
 
-[node name="dungeon_test_01" type="Node" index="0"]
+[node name="dungeon_test_01" type="Node"]
 
 [node name="Player" parent="." index="0" instance=ExtResource( 1 )]
 
@@ -384,6 +384,7 @@ anchor_bottom = 0.0
 margin_right = 40.0
 margin_bottom = 14.0
 rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
 mouse_filter = 2
 mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
