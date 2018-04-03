@@ -41,6 +41,8 @@ func GetHeadshot():
 
 func GetDialogue(index):
 	if index == -1:
+		if familiar:
+			return dialogue[1]
 		return introduction
 	if index == 1:
 		familiar = true
