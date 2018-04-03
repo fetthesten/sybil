@@ -441,7 +441,6 @@ material/0 = null
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." index="4"]
 
-editor/display_folded = true
 layer = 1
 offset = Vector2( 0, 0 )
 rotation = 0.0
@@ -599,6 +598,8 @@ mesh = SubResource( 7 )
 skeleton = NodePath("..")
 material/0 = null
 _sections_unfolded = [ "Transform" ]
+
+[connection signal="meta_clicked" from="CanvasLayer/Node2D/Dialogue/DialogueLabel" to="Player" method="DialogueChoice"]
 
 [connection signal="body_entered" from="ActorTest/Area" to="ActorTest" method="BodyEnter"]
 

@@ -187,9 +187,11 @@ func DialogueInteraction(action):
 	dialogueCanvas.append_bbcode('[color=#ff0000]' + dialogueTarget.GetActorName() + ':[/color] ' + response)
 	dialogueCanvas.newline()
 	
+	var i = 1
 	for reply in replies:
-		dialogueCanvas.append_bbcode('[color=#ffff00]' + reply + '[/color]')
+		dialogueCanvas.append_bbcode('[color=#ffff00][url=' + str(i) + ']' + reply + '[/url][/color]')
 		dialogueCanvas.newline()
+		i += 1
 
 func NetworkStartServer():
 	get_tree().set_network_peer(null) # shutdown network
@@ -204,3 +206,6 @@ func NetworkStartClient():
 	peer.create_client('127.0.0.1', 1337)
 	get_tree().set_network_peer(peer)
 	get_tree().set_meta('network_peer', peer)
+
+func DialogueChoice(meta):
+	dialogueLastInteraction = int(meta)
