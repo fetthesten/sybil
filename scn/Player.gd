@@ -26,7 +26,7 @@ var targetCamXRot
 var networkInfo
 
 var dialogueOngoing = false
-var dialogueLastInteraction = 0
+var dialogueLastInteraction = 'none'
 var dialogueNode
 var dialogueCanvas
 var dialogueBackground
@@ -98,7 +98,7 @@ func _physics_process(delta):
 	
 	#dialogue takes priority
 	if dialogueOngoing:
-		if dialogueLastInteraction != 0:
+		if dialogueLastInteraction != 'idle':
 			DialogueInteraction(dialogueLastInteraction)
 		
 	else:
@@ -106,7 +106,7 @@ func _physics_process(delta):
 			# initiating dialogue takes priority over other interactions
 			if dialogueTriggerEnabled:
 				dialogueOngoing = true
-				dialogueLastInteraction = -1
+				dialogueLastInteraction = 'none'
 				dialogueNode.show()
 			else:
 				var fireball = FIREBALL.instance()
@@ -169,29 +169,39 @@ func _notification(what):
 		get_tree().quit()
 		
 func SetDialogueTarget(target):
+	if not dialogueOngoing:
 		dialogueTarget = target
 		dialogueTriggerEnabled = (target != null)
 		if dialogueTriggerEnabled:
 			interactionIcon.add_image(GUI_TALK_PROMPT)
 		else:
 			interactionIcon.clear()
-		dialogueNode.hide()
-		dialogueCanvas.clear()
-		dialogueOngoing = false
+		DialogueClose()
 		
 func DialogueInteraction(action):
 	var response = dialogueTarget.GetDialogue(action)
-	var replies = dialogueTarget.GetReplies(action)
-	dialogueLastInteraction = 0
+	if response['text'] == 'end':
+		DialogueClose()
+		return
+	var replies = dialogueTarget.GetReplies(response['replies'])
+	dialogueLastInteraction = 'idle'
 	dialogueCanvas.add_image(dialogueTarget.GetHeadshot())
-	dialogueCanvas.append_bbcode('[color=#ff0000]' + dialogueTarget.GetActorName() + ':[/color] ' + response)
+	dialogueCanvas.append_bbcode('[color=#ff0000]' + dialogueTarget.GetActorName() + ':[/color] ' + response['text'])
 	dialogueCanvas.newline()
 	
-	var i = 1
 	for reply in replies:
-		dialogueCanvas.append_bbcode('[color=#ffff00][url=' + str(i) + ']' + reply + '[/url][/color]')
+		dialogueCanvas.append_bbcode('~[color=#ffff00][url=' + reply['id'] + ']' + reply['text'] + '[/url][/color]')
 		dialogueCanvas.newline()
-		i += 1
+
+func DialogueChoice(meta):
+	var t = dialogueCanvas.text
+	dialogueCanvas.bbcode_text = t
+	dialogueLastInteraction = meta
+
+func DialogueClose():
+	dialogueNode.hide()
+	dialogueCanvas.clear()
+	dialogueOngoing = false
 
 func NetworkStartServer():
 	get_tree().set_network_peer(null) # shutdown network
@@ -207,5 +217,4 @@ func NetworkStartClient():
 	get_tree().set_network_peer(peer)
 	get_tree().set_meta('network_peer', peer)
 
-func DialogueChoice(meta):
-	dialogueLastInteraction = int(meta)
+
