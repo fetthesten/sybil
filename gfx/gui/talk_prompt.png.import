@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/icon.png-487276ed1e3a0c39cad0279d744ee560.stex"
+path="res://.import/talk_prompt.png-a94b10adfec542ed01162a5519ab773f.stex"
 
 [deps]
 
-source_file="res://icon.png"
-source_md5="ae7e641067601e2184afcade49abd283"
+source_file="res://gfx/gui/talk_prompt.png"
+source_md5="26abcffcd39e4996ae29f8392a23d26c"
 
-dest_files=[ "res://.import/icon.png-487276ed1e3a0c39cad0279d744ee560.stex" ]
-dest_md5="84511021bbc8c9d37c7f0f4d181de883"
+dest_files=[ "res://.import/talk_prompt.png-a94b10adfec542ed01162a5519ab773f.stex" ]
+dest_md5="aba68c230832a8e2b3091af95fd3342a"
 
 [params]
 

@@ -8,7 +8,10 @@ path.etc2="res://.import/dungeon02.png-810d9836dc9a1c50530a2a7e72e45615.etc2.ste
 [deps]
 
 source_file="res://gfx/env_tex/dungeon02.png"
+source_md5="4130933c986bba291b96e1afe38a18a6"
+
 dest_files=[ "res://.import/dungeon02.png-810d9836dc9a1c50530a2a7e72e45615.s3tc.stex", "res://.import/dungeon02.png-810d9836dc9a1c50530a2a7e72e45615.etc2.stex" ]
+dest_md5="4e753066ee1a8f3618f6407fc2bf811d"
 
 [params]
 

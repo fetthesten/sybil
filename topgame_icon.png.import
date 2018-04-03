@@ -7,7 +7,10 @@ path="res://.import/topgame_icon.png-d63a96a6c9b4d8501b2ec78df8c67be0.stex"
 [deps]
 
 source_file="res://topgame_icon.png"
+source_md5="3880a74c1678374c53186611ad84546d"
+
 dest_files=[ "res://.import/topgame_icon.png-d63a96a6c9b4d8501b2ec78df8c67be0.stex" ]
+dest_md5="87f935f8b63473e041175bc75039e769"
 
 [params]
 

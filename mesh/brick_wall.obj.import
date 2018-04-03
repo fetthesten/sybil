@@ -9,7 +9,10 @@ path="res://.import/brick_wall.obj-73a4414dd3149314294cc932368857e7.mesh"
 files=[ "res://.import/brick_wall.obj-73a4414dd3149314294cc932368857e7.mesh" ]
 
 source_file="res://mesh/brick_wall.obj"
+source_md5="4b960dc996c34f813e400fa6bbad3fd3"
+
 dest_files=[ "res://.import/brick_wall.obj-73a4414dd3149314294cc932368857e7.mesh", "res://.import/brick_wall.obj-73a4414dd3149314294cc932368857e7.mesh" ]
+dest_md5="3567e21be9019bf4faa6c7519f0243b7"
 
 [params]
 

@@ -7,6 +7,7 @@ export (float) var LOOK_SENSITIVITY
 export (float) var CAM_DIST
 export (float) var CAM_OFFSET
 export (bool) var INVERT_LOOK
+export (Texture) var GUI_TALK_PROMPT
 
 const V2_ZERO = Vector2(0,0)
 const V3_ZERO = Vector3(0,0,0)
@@ -24,7 +25,25 @@ var targetCamYRot
 var targetCamXRot
 var networkInfo
 
+var dialogueOngoing = false
+var dialogueLastInteraction = 0
+var dialogueNode
+var dialogueCanvas
+var dialogueBackground
+var dialogueTarget = null
+var dialogueTriggerEnabled = false
+var interactionIcon
+
 func _ready():
+	# set up dialogue
+	dialogueNode = $"../CanvasLayer/Node2D/Dialogue"
+	dialogueCanvas = $"../CanvasLayer/Node2D/Dialogue/DialogueLabel"
+	dialogueBackground = $"../CanvasLayer/Node2D/Dialogue/DialogueBackground"
+	dialogueBackground.rect_size = dialogueCanvas.rect_size
+	dialogueNode.hide()
+	interactionIcon = $"../CanvasLayer/Node2D/InteractionIcon"
+	
+	# set up camera and offsets
 	camera = $"../CameraTarget/Camera"
 	cameraTarget = $"../CameraTarget"
 	shotOrigin = $"../CameraTarget/ShotOrigin"
@@ -77,12 +96,24 @@ func _physics_process(delta):
 	move = move.normalized()
 	move = move * SPEED * delta
 	
-	if (Input.is_action_just_pressed('player_attack')):
-		var fireball = FIREBALL.instance()
-		get_parent().add_child(fireball)
-		fireball.set_transform(shotOrigin.get_global_transform().orthonormalized())
-		fireball.set_linear_velocity(shotOrigin.get_global_transform().basis[2].normalized()*20)
-		fireball.add_collision_exception_with(self)
+	#dialogue takes priority
+	if dialogueOngoing:
+		if dialogueLastInteraction != 0:
+			DialogueInteraction(dialogueLastInteraction)
+		
+	else:
+		if (Input.is_action_just_pressed('player_attack')):
+			# initiating dialogue takes priority over other interactions
+			if dialogueTriggerEnabled:
+				dialogueOngoing = true
+				dialogueLastInteraction = -1
+				dialogueNode.show()
+			else:
+				var fireball = FIREBALL.instance()
+				get_parent().add_child(fireball)
+				fireball.set_transform(shotOrigin.get_global_transform().orthonormalized())
+				fireball.set_linear_velocity(shotOrigin.get_global_transform().basis[2].normalized()*20)
+				fireball.add_collision_exception_with(self)
 	
 	if (Input.is_action_just_released('net_start_server')):
 		NetworkStartServer()
@@ -136,6 +167,29 @@ func _notification(what):
 	if what == MainLoop.NOTIFICATION_WM_QUIT_REQUEST:
 		get_tree().set_network_peer(null) # shutdown network
 		get_tree().quit()
+		
+func SetDialogueTarget(target):
+		dialogueTarget = target
+		dialogueTriggerEnabled = (target != null)
+		if dialogueTriggerEnabled:
+			interactionIcon.add_image(GUI_TALK_PROMPT)
+		else:
+			interactionIcon.clear()
+		dialogueNode.hide()
+		dialogueCanvas.clear()
+		dialogueOngoing = false
+		
+func DialogueInteraction(action):
+	var response = dialogueTarget.GetDialogue(action)
+	var replies = dialogueTarget.GetReplies(action)
+	dialogueLastInteraction = 0
+	dialogueCanvas.add_image(dialogueTarget.GetHeadshot())
+	dialogueCanvas.append_bbcode('[color=#ff0000]' + dialogueTarget.GetActorName() + ':[/color] ' + response)
+	dialogueCanvas.newline()
+	
+	for reply in replies:
+		dialogueCanvas.append_bbcode('[color=#ffff00]' + reply + '[/color]')
+		dialogueCanvas.newline()
 
 func NetworkStartServer():
 	get_tree().set_network_peer(null) # shutdown network
