@@ -1,32 +1,36 @@
 extends Spatial
 
-export (Texture) var HEADSHOT
-export (String) var UNFAMILIAR_NAME
-export (String) var FAMILIAR_NAME
-
+var first_node_priority
+var picture
 var dialogue = {}
 var replies = {}
+var data = {}
+var flags = {}
 
+# testing stuff because stationary stuff is booooring
 var mdl
 var heh
 
-# flags
-var flags = {}
-
 func _ready():
+	var file = File.new()
+	file.open("res://dat/dialogue/test_dialogue.js", file.READ)
+	var dat = JSON.parse(file.get_as_text())
+	file.close() 
+
+	if dat.error == 0:
+		first_node_priority = dat.result['first_node_priority']
+		picture = load(dat.result['picture'])
+		dialogue = dat.result['dialogue']
+		replies = dat.result['replies']
+		data = dat.result['data']
+		flags = dat.result['flags']
+		
+		for flag in flags.keys():
+			flags[flag] = false # flags always start out as false and can only be set, never unset
+	
+	dialogue['error'] = { 'text': 'ERROR', 'replies': 'none' }
+	
 	mdl = $"MeshInstance"
-	
-	flags['familiar'] = false
-	flags['not_first'] = false
-	
-	dialogue['intro_unfamiliar_first'] = { 'text': 'Why, hello, friend! Are you lost, perchance? Forsooth! Prithee, tell me thy name!!!!! lolz!!!!', 'replies': 'tell_name,goodbye' }
-	dialogue['intro_unfamiliar'] = { 'text': 'Hello again, curious stranger!! tel me ur naem plz lolz!!!!!!', 'replies': 'tell_name,goodbye' }
-	dialogue['told_name'] = { 'text': 'What a splendid name!!! Indeeeeeeed!!!!! Verily!!!!!!!!!!!! My name is ' + FAMILIAR_NAME + '!!!! FORSOOOOOOOOOOOTH!!!!', 'replies': 'goodbye' }
-	dialogue['default'] = { 'text': 'LOLZ!!!', 'replies': 'goodbye' }
-	
-	replies['tell_name'] = { 'id': 'tell_name', 'text': 'OMIGOSH yaas queen my name is Donald J. Trump!!', 'response': 'told_name', 'triggers': 'setflag:familiar' }
-	replies['goodbye'] = { 'id': 'goodbye', 'text': 'lol bye', 'response': 'default', 'triggers': 'end' }
-	
 	heh = 0
 
 func _process(delta):
@@ -42,41 +46,75 @@ func BodyExit(body):
 	if body.name == "Player":
 		body.SetDialogueTarget(null)
 
-func GetHeadshot():
-	return HEADSHOT
+func GetPicture():
+	return picture
 
-func GetDialogue(index):
+func ProcessDialogue(index):
 	if index == 'none':
-		if not flags['not_first']:
-			if not flags['familiar']:
-				flags['not_first'] = true
-				return dialogue['intro_unfamiliar_first']
-		else:
-			if not flags['familiar']:
-				return dialogue['intro_unfamiliar']
-			else:
-				return dialogue['default']
-	
+		# first interaction
+		index = first_node_priority
 	else:
-		var triggers = replies[index]['triggers']
-		if triggers != 'none':
-			triggers = triggers.split(',')
-			for trigger in triggers:
-				trigger = trigger.split(':')
-				if trigger[0] == 'setflag':
-					flags[trigger[1]] = true
-				if trigger[0] == 'end':
-					return { 'text': 'end', 'replies': 'none' }
-		
-		return dialogue[replies[index]['response']]
-
-func GetReplies(indices):
-	indices = indices.split(',')
+		# index is an entry in the replies dict
+		SetFlags(replies[index])
+		if replies[index].has('end'):
+			return { 'text': 'end' }
+		index = replies[index]['response']
+	var node = dialogue[ResolveNodes(index, 'dialogue')].duplicate()
+	SetFlags(node)
+	# insert replies and replace tokens
+	var d = {}
+	for item in data:
+		d[item] = ResolveData(item)
+	var r = ResolveNodes(node['replies'], 'replies')
+	node['replies'] = []
+	for reply in r:
+		node['replies'].append({ 'id': reply['id'], 'text': reply['text'].format(d) })
+	node['text'] = node['text'].format(d)
 	
-	var results = []
-	for index in indices:
-		results.append(replies[index])
-	return results
+	return node
+
+func ResolveNodes(query, type):
+	if type == 'dialogue':
+		if query.find(',') == -1:
+			return query
+		var indices = query.split(',')
+		for index in indices:
+			if not dialogue[index].has('checkflags'):
+				return index
+			if CheckFlags(dialogue[index]['checkflags']):
+				return index
+	else:
+		var results = []
+		var indices = query.split(',')
+		for index in indices:
+			if not replies[index].has('checkflags'):
+				results.append(replies[index])
+			elif CheckFlags(replies[index]['checkflags']):
+				results.append(replies[index])
+		return results
+	return 'error'
+
+func ResolveData(query):
+	for checkflags in data[query].keys():
+		if checkflags != 'default':
+			if CheckFlags(checkflags):
+				return data[query][checkflags]
+		else:
+			return data[query][checkflags]
+
+func CheckFlags(query):
+	var f = query.split(',')
+	var allFlagsChecked = true
+	for flag in f:
+		if not flags[flag]:
+			allFlagsChecked = false
+	return allFlagsChecked
+
+func SetFlags(node):
+	if node.has('setflags'):
+		var setflags = node['setflags'].split(',')
+		for flag in setflags:
+			flags[flag] = true
 
 func GetActorName():
-	return FAMILIAR_NAME if flags['familiar'] else UNFAMILIAR_NAME
+	return ResolveData('name')

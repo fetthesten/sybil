@@ -179,17 +179,16 @@ func SetDialogueTarget(target):
 		DialogueClose()
 		
 func DialogueInteraction(action):
-	var response = dialogueTarget.GetDialogue(action)
+	var response = dialogueTarget.ProcessDialogue(action)
 	if response['text'] == 'end':
 		DialogueClose()
 		return
-	var replies = dialogueTarget.GetReplies(response['replies'])
 	dialogueLastInteraction = 'idle'
-	dialogueCanvas.add_image(dialogueTarget.GetHeadshot())
+	dialogueCanvas.add_image(dialogueTarget.GetPicture())
 	dialogueCanvas.append_bbcode('[color=#ff0000]' + dialogueTarget.GetActorName() + ':[/color] ' + response['text'])
 	dialogueCanvas.newline()
 	
-	for reply in replies:
+	for reply in response['replies']:
 		dialogueCanvas.append_bbcode('~[color=#ffff00][url=' + reply['id'] + ']' + reply['text'] + '[/url][/color]')
 		dialogueCanvas.newline()
 

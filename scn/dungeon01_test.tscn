@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=2]
+[gd_scene load_steps=18 format=2]
 
 [ext_resource path="res://scn/Player.tscn" type="PackedScene" id=1]
 [ext_resource path="res://scn/Player.gd" type="Script" id=2]
@@ -10,7 +10,6 @@
 [ext_resource path="res://mesh/rooms/Wall02.tscn" type="PackedScene" id=8]
 [ext_resource path="res://gfx/env_tex/dungeon02.png" type="Texture" id=9]
 [ext_resource path="res://scn/ActorTest.gd" type="Script" id=10]
-[ext_resource path="res://gfx/gui/gui_head_test.png" type="Texture" id=11]
 
 [sub_resource type="SpatialMaterial" id=1]
 
@@ -561,9 +560,6 @@ _sections_unfolded = [ "Anchor", "Rect" ]
 
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 1, 7 )
 script = ExtResource( 10 )
-HEADSHOT = ExtResource( 11 )
-UNFAMILIAR_NAME = "Literally Who"
-FAMILIAR_NAME = "Absolutely Satan"
 
 [node name="Area" type="Area" parent="ActorTest" index="0"]
 

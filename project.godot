@@ -12,6 +12,7 @@ config_version=3
 
 config/name="sybil"
 run/main_scene="res://scn/dungeon01_test.tscn"
+boot_splash/image="res://topgame_icon.png"
 config/icon="res://topgame_icon.png"
 
 [display]
