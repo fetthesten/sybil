@@ -13,12 +13,15 @@ config_version=3
 config/name="sybil"
 run/main_scene="res://scn/dungeon01_test.tscn"
 boot_splash/image="res://topgame_icon.png"
+boot_splash/fullsize=false
+boot_splash/bg_color=Color( 1, 1, 1, 1 )
 config/icon="res://topgame_icon.png"
 
 [display]
 
 window/size/width=1600
 window/size/height=900
+window/vsync/use_vsync=false
 
 [editor_plugins]
 

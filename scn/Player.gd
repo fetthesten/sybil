@@ -81,8 +81,10 @@ func _physics_process(delta):
 	if (Input.is_action_pressed('cam_down')):
 		targetCamXRot = cameraTarget.rotation.x - camStickAdjust
 	
-	cameraTarget.rotation.y = lerp(cameraTarget.rotation.y, targetCamYRot, 0.2)
-	cameraTarget.rotation.x = clamp(lerp(cameraTarget.rotation.x, targetCamXRot, 0.2), -1.0, 0.1)
+	#cameraTarget.rotation.y = lerp(cameraTarget.rotation.y, targetCamYRot, 1.0 * delta)
+	#cameraTarget.rotation.x = clamp(lerp(cameraTarget.rotation.x, targetCamXRot, 1.0 * delta), -1.0, 0.1)
+	cameraTarget.rotation.y = targetCamYRot
+	cameraTarget.rotation.x = clamp(targetCamXRot, -1.0, 0.1)
 
 	var cam_transform = camera.get_global_transform()
 	if (Input.is_action_pressed("ui_up")):
@@ -112,7 +114,7 @@ func _physics_process(delta):
 				var fireball = FIREBALL.instance()
 				get_parent().add_child(fireball)
 				fireball.set_transform(shotOrigin.get_global_transform().orthonormalized())
-				fireball.set_linear_velocity(shotOrigin.get_global_transform().basis[2].normalized()*20)
+				fireball.set_linear_velocity(shotOrigin.get_global_transform().basis[2].normalized()*100)
 				fireball.add_collision_exception_with(self)
 	
 	if (Input.is_action_just_released('net_start_server')):
