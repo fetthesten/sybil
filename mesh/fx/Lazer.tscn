@@ -70,7 +70,7 @@ _sections_unfolded = [ "Albedo", "Emission" ]
 
 extents = Vector3( 1, 1, 1 )
 
-[node name="Lazer" type="RigidBody" index="0"]
+[node name="Lazer" type="RigidBody"]
 
 input_ray_pickable = false
 input_capture_on_drag = false
@@ -122,7 +122,5 @@ transform = Transform( 0.1, 0, 0, 0, 0.1, 0, 0, 0, 2, 0, 0, 0 )
 shape = SubResource( 3 )
 disabled = false
 _sections_unfolded = [ "Transform" ]
-
-[connection signal="body_entered" from="." to="." method="Collision"]
 
 

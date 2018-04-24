@@ -1,9 +1,7 @@
 extends RigidBody
 
 func _ready():
-	pass
+	connect('body_entered', self, 'Collision')
 
-
-
-func _on_Fireball_body_entered( body ):
+func Collision( body ):
 	self.queue_free()
