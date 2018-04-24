@@ -1,26 +1,27 @@
 extends Node
 
 # main game manager script
-
-# level stuff
-var levels = {
-	'test level': preload('res://scn/dungeon01_test.tscn'),
-	}
+# eventually this will be the glue that holds the game together and helps other scripts
+# check and trade data back and forth
 
 # gui stuff
+# res = the resource to preload
+# instance = the in-game instance accessed by scripts and such
 var gui = {
-	'health indicator': { 'res': preload('res://gui/HealthIndicator.tscn'), 'instance': null, },
+	'health_indicator': { 'res': preload('res://gui/HealthIndicator.tscn'), 'instance': null, },
 	}
 
-var running = false
-
 func _ready():
-	$LevelContainer.add_child(levels['test level'].instance())
-	gui['health indicator']['instance'] = gui['health indicator']['res'].instance()
-	$GUI.add_child(gui['health indicator']['instance'])
+	load_gui()
 
 func _process(delta):
-	if not running:
-		running = true
-		print('running')
-		print(gui['health indicator'])
+	pass
+	
+func load_gui():
+	for element in gui.keys():
+		print(gui[element])
+		gui[element].instance = gui[element].res.instance()
+		GUI.add_child(gui[element].instance)
+		
+func testglobal():
+	print('globalization')

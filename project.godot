@@ -17,6 +17,11 @@ boot_splash/fullsize=false
 boot_splash/bg_color=Color( 1, 1, 1, 1 )
 config/icon="res://topgame_icon.png"
 
+[autoload]
+
+Main="*res://scr/Main.gd"
+GUI="*res://obj/GUI.tscn"
+
 [display]
 
 window/size/width=1600

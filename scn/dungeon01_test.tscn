@@ -149,7 +149,7 @@ subdivide_width = 0
 subdivide_height = 0
 subdivide_depth = 0
 
-[node name="dungeon_test_01" type="Node"]
+[node name="dungeon_test_01" type="Node" index="0"]
 
 [node name="Player" parent="." index="0" instance=ExtResource( 1 )]
 
@@ -189,8 +189,6 @@ omni_shadow_detail = 1
 _sections_unfolded = [ "Light", "Omni", "Shadow", "Transform" ]
 
 [node name="Rooms" type="Spatial" parent="." index="1"]
-
-editor/display_folded = true
 
 [node name="Room01" parent="Rooms" index="0" instance=ExtResource( 5 )]
 

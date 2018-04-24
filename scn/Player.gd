@@ -52,6 +52,7 @@ func _ready():
 	
 	networkInfo = '\n[not connected]'
 	get_tree().set_meta('network_peer', false)
+	Main.testglobal()
 
 func _physics_process(delta):
 	var move = Vector3()
