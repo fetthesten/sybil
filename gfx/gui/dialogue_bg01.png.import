@@ -7,10 +7,10 @@ path="res://.import/dialogue_bg01.png-c55dd4e723dc20226fde89f386ad16ea.stex"
 [deps]
 
 source_file="res://gfx/gui/dialogue_bg01.png"
-source_md5="0907690ea67ce64d85c7be380a50410c"
+source_md5="429374207265f57d93a466a8e9583ecf"
 
 dest_files=[ "res://.import/dialogue_bg01.png-c55dd4e723dc20226fde89f386ad16ea.stex" ]
-dest_md5="49e25898b4ac6a28ca0a72e837dd409a"
+dest_md5="c3d3f1e1231c3bea501267c1d657df6c"
 
 [params]
 
