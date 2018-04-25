@@ -27,22 +27,11 @@ var networkInfo
 
 var dialogueOngoing = false
 var dialogueLastInteraction = 'none'
-var dialogueNode
-var dialogueCanvas
-var dialogueBackground
 var dialogueTarget = null
 var dialogueTriggerEnabled = false
-var interactionIcon
 
-func _ready():
-	# set up dialogue
-	dialogueNode = $"../CanvasLayer/Node2D/Dialogue"
-	dialogueCanvas = $"../CanvasLayer/Node2D/Dialogue/DialogueLabel"
-	dialogueBackground = $"../CanvasLayer/Node2D/Dialogue/DialogueBackground"
-	dialogueBackground.rect_size = dialogueCanvas.rect_size
-	dialogueNode.hide()
-	interactionIcon = $"../CanvasLayer/Node2D/InteractionIcon"
-	
+
+func _ready():	
 	# set up camera and offsets
 	camera = $"../CameraTarget/Camera"
 	cameraTarget = $"../CameraTarget"
@@ -52,7 +41,6 @@ func _ready():
 	
 	networkInfo = '\n[not connected]'
 	get_tree().set_meta('network_peer', false)
-	Main.testglobal()
 
 func _physics_process(delta):
 	var move = Vector3()
@@ -101,16 +89,15 @@ func _physics_process(delta):
 	
 	#dialogue takes priority
 	if dialogueOngoing:
-		if dialogueLastInteraction != 'idle':
-			DialogueInteraction(dialogueLastInteraction)
+		if GUI.dialogue_last_interaction != 'idle':
+			DialogueInteraction(GUI.dialogue_last_interaction)
 		
 	else:
 		if (Input.is_action_just_pressed('player_attack')):
 			# initiating dialogue takes priority over other interactions
 			if dialogueTriggerEnabled:
 				dialogueOngoing = true
-				dialogueLastInteraction = 'none'
-				dialogueNode.show()
+				GUI.dialogue_start()
 			else:
 				var fireball = FIREBALL.instance()
 				get_parent().add_child(fireball)
@@ -149,7 +136,7 @@ func _physics_process(delta):
 		net = get_tree().is_network_server()
 		networkInfo += '\n' + str(net)
 	
-	$"../CanvasLayer/Node2D/FpsLabel".text = 'fps: ' + str(Engine.get_frames_per_second()) + '\ncam_dist: ' + str(CAM_DIST) + networkInfo
+	GUI.set_debug_info('fps: ' + str(Engine.get_frames_per_second()) + '\ncam_dist: ' + str(CAM_DIST) + networkInfo)
 	
 	# clear input stuffs
 	mouseMove = Vector2(0,0)
@@ -176,9 +163,9 @@ func SetDialogueTarget(target):
 		dialogueTarget = target
 		dialogueTriggerEnabled = (target != null)
 		if dialogueTriggerEnabled:
-			interactionIcon.add_image(GUI_TALK_PROMPT)
+			GUI.set_interaction_icon('talk')
 		else:
-			interactionIcon.clear()
+			GUI.set_interaction_icon('none')
 		DialogueClose()
 		
 func DialogueInteraction(action):
@@ -186,23 +173,11 @@ func DialogueInteraction(action):
 	if response['text'] == 'end':
 		DialogueClose()
 		return
-	dialogueLastInteraction = 'idle'
-	dialogueCanvas.add_image(dialogueTarget.GetPicture())
-	dialogueCanvas.append_bbcode('[color=#ff0000]' + dialogueTarget.GetActorName() + ':[/color] ' + response['text'])
-	dialogueCanvas.newline()
-	
-	for reply in response['replies']:
-		dialogueCanvas.append_bbcode('~[color=#ffff00][url=' + reply['id'] + ']' + reply['text'] + '[/url][/color]')
-		dialogueCanvas.newline()
-
-func DialogueChoice(meta):
-	var t = dialogueCanvas.text
-	dialogueCanvas.bbcode_text = t
-	dialogueLastInteraction = meta
+	GUI.dialogue_last_interaction = 'idle'
+	GUI.dialogue_add_response(dialogueTarget.GetPicture(), dialogueTarget.GetActorName(), response['text'], response['replies'])
 
 func DialogueClose():
-	dialogueNode.hide()
-	dialogueCanvas.clear()
+	GUI.dialogue_end()
 	dialogueOngoing = false
 
 func NetworkStartServer():
