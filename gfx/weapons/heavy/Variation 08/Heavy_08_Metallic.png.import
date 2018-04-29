@@ -1,0 +1,32 @@
+[remap]
+
+importer="texture"
+type="StreamTexture"
+path="res://.import/Heavy_08_Metallic.png-9f82661e75cd725c213d4ad3f155d63b.stex"
+
+[deps]
+
+source_file="res://gfx/weapons/heavy/Variation 08/Heavy_08_Metallic.png"
+source_md5="f7d91741276ff9dc5ec8357c4fbdbe56"
+
+dest_files=[ "res://.import/Heavy_08_Metallic.png-9f82661e75cd725c213d4ad3f155d63b.stex" ]
+dest_md5="76cd75d63a27a29c59a76ee274735131"
+
+[params]
+
+compress/mode=0
+compress/lossy_quality=0.7
+compress/hdr_mode=0
+compress/normal_map=0
+flags/repeat=0
+flags/filter=true
+flags/mipmaps=false
+flags/anisotropic=false
+flags/srgb=2
+process/fix_alpha_border=true
+process/premult_alpha=false
+process/HDR_as_SRGB=false
+stream=false
+size_limit=0
+detect_3d=true
+svg/scale=1.0

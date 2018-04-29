@@ -1,0 +1,32 @@
+[remap]
+
+importer="texture"
+type="StreamTexture"
+path="res://.import/Heavy_08_Albedo.png-d90b501ee24570657689164636d2da5c.stex"
+
+[deps]
+
+source_file="res://gfx/weapons/heavy/Variation 08/Heavy_08_Albedo.png"
+source_md5="cf28a1e254eb49367bf8e1aa523b257d"
+
+dest_files=[ "res://.import/Heavy_08_Albedo.png-d90b501ee24570657689164636d2da5c.stex" ]
+dest_md5="9f7be41a41de253b4b286ef1f67cb2f2"
+
+[params]
+
+compress/mode=0
+compress/lossy_quality=0.7
+compress/hdr_mode=0
+compress/normal_map=0
+flags/repeat=0
+flags/filter=true
+flags/mipmaps=false
+flags/anisotropic=false
+flags/srgb=2
+process/fix_alpha_border=true
+process/premult_alpha=false
+process/HDR_as_SRGB=false
+stream=false
+size_limit=0
+detect_3d=true
+svg/scale=1.0

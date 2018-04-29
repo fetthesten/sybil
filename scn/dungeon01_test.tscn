@@ -71,11 +71,11 @@ subdivide_width = 0
 subdivide_height = 0
 subdivide_depth = 0
 
-[sub_resource type="SphereShape" id=5]
+[sub_resource type="SphereShape" id=3]
 
 radius = 3.0
 
-[sub_resource type="SpatialMaterial" id=6]
+[sub_resource type="SpatialMaterial" id=4]
 
 render_priority = 0
 flags_transparent = false
@@ -131,9 +131,9 @@ proximity_fade_enable = false
 distance_fade_enable = false
 _sections_unfolded = [ "Albedo", "Emission" ]
 
-[sub_resource type="CubeMesh" id=7]
+[sub_resource type="CubeMesh" id=5]
 
-material = SubResource( 6 )
+material = SubResource( 4 )
 size = Vector3( 2, 2, 2 )
 subdivide_width = 0
 subdivide_height = 0
@@ -143,6 +143,7 @@ subdivide_depth = 0
 
 [node name="Player" parent="." index="0" instance=ExtResource( 1 )]
 
+editor/display_folded = true
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 2, 4 )
 script = ExtResource( 2 )
 _sections_unfolded = [ "Transform" ]
@@ -179,6 +180,8 @@ omni_shadow_detail = 1
 _sections_unfolded = [ "Light", "Omni", "Shadow", "Transform" ]
 
 [node name="Rooms" type="Spatial" parent="." index="1"]
+
+editor/display_folded = true
 
 [node name="Room01" parent="Rooms" index="0" instance=ExtResource( 5 )]
 
@@ -394,6 +397,7 @@ _sections_unfolded = [ "Transform" ]
 
 [node name="CameraTarget" type="Spatial" parent="." index="3"]
 
+editor/display_folded = true
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 2, 4 )
 _sections_unfolded = [ "Transform" ]
 
@@ -436,6 +440,7 @@ material/0 = null
 
 [node name="ActorTest" type="Spatial" parent="." index="4"]
 
+editor/display_folded = true
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 1, 7 )
 script = ExtResource( 9 )
 
@@ -465,7 +470,7 @@ _sections_unfolded = [ "Transform" ]
 
 [node name="CollisionShape" type="CollisionShape" parent="ActorTest/Area" index="0"]
 
-shape = SubResource( 5 )
+shape = SubResource( 3 )
 disabled = false
 
 [node name="MeshInstance" type="MeshInstance" parent="ActorTest" index="1"]
@@ -479,7 +484,7 @@ lod_min_distance = 0.0
 lod_min_hysteresis = 0.0
 lod_max_distance = 0.0
 lod_max_hysteresis = 0.0
-mesh = SubResource( 7 )
+mesh = SubResource( 5 )
 skeleton = NodePath("..")
 material/0 = null
 _sections_unfolded = [ "Transform" ]
