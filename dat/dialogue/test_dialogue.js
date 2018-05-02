@@ -23,7 +23,7 @@
 	},
 	"replies":
 	{
-		"tell_name": { "id": "tell_name", "text": "OMIGOSH yaas queen my name is Donald J. Trump!!", "response": "told_name", "setflags": "familiar" },
+		"tell_name": { "id": "tell_name", "text": "OMIGOSH yaas queen my name is {playerName}", "response": "told_name", "setflags": "familiar" },
 		"goodbye": { "id": "goodbye", "text": "lol bye", "response": "default", "end": "true" }
 	}
 }

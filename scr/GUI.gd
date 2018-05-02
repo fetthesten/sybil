@@ -4,6 +4,7 @@ var interaction_icons
 var dialogue_last_interaction
 
 func _ready():
+	$DebugText.text = ''
 	# set up dialogue
 	$DialogueBackground.hide()
 	$DialogueText.hide()

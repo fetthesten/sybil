@@ -34,6 +34,7 @@ func _ready():
 	heh = 0
 
 func _process(delta):
+	#yeah... just to have a simple effect to look at while testing
 	heh += delta
 	mdl.translation.y = 2.5 + sin(heh)
 	mdl.rotation.y = heh
