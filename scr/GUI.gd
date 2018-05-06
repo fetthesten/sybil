@@ -1,42 +1,19 @@
 extends Node2D
 
 var interaction_icons
-var dialogue_last_interaction
+
+var dialogue_current_string = 'Totally awesome.'
+var dialogue_current_index = 0
 
 func _ready():
 	$DebugText.text = ''
 	# set up dialogue
-	$DialogueBackground.hide()
-	$DialogueText.hide()
-	dialogue_last_interaction = 'idle'
+	$DialogueText/TextDisplay.playback_speed = 5
 	
 	#set up interaction icons
 	interaction_icons =	{
 		'talk': preload('res://gfx/gui/talk_prompt.png'),
 	}
-
-func dialogue_start():
-	$DialogueBackground.show()
-	$DialogueText.show()
-	dialogue_last_interaction = 'none'
-
-func dialogue_end():
-	$DialogueBackground.hide()
-	$DialogueText.clear()
-
-func dialogue_add_response(img, actor_name, response, replies):
-	$DialogueText.add_image(img)
-	$DialogueText.append_bbcode('[color=#ff0000]' + actor_name + ':[/color] ' + response)
-	$DialogueText.newline()
-	
-	for reply in replies:
-		$DialogueText.append_bbcode('~[color=#ffff00][url=' + reply['id'] + ']' + reply['text'] + '[/url][/color]')
-		$DialogueText.newline()
-
-func dialogue_choice(meta):
-	var t = $DialogueText.text
-	$DialogueText.bbcode_text = t
-	dialogue_last_interaction = meta
 	
 func set_debug_info(info):
 	if Main.DEBUG:
@@ -48,4 +25,11 @@ func set_interaction_icon(icon = 'none'):
 	elif icon == 'none':
 		$InteractionIcon.texture = null
 
+func dialogue_test():
+	pass
 
+func dialogue_increment_display():
+	if dialogue_current_index <= dialogue_current_string.length():
+		$DialogueText/TextContent.text = dialogue_current_string.substr(0, dialogue_current_index)
+		$DialogueText/TextShadow.text = dialogue_current_string.substr(0, dialogue_current_index)
+		dialogue_current_index+=1

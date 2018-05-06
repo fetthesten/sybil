@@ -25,12 +25,6 @@ var targetCamYRot
 var targetCamXRot
 var networkInfo
 
-var dialogueOngoing = false
-var dialogueLastInteraction = 'none'
-var dialogueTarget = null
-var dialogueTriggerEnabled = false
-
-
 func _ready():	
 	# set up camera and offsets
 	camera = $"../CameraTarget/Camera"
@@ -87,23 +81,12 @@ func _physics_process(delta):
 	move = move.normalized()
 	move = move * SPEED * delta
 	
-	#dialogue takes priority
-	if dialogueOngoing:
-		if GUI.dialogue_last_interaction != 'idle':
-			DialogueInteraction(GUI.dialogue_last_interaction)
-		
-	else:
-		if (Input.is_action_just_pressed('player_attack')):
-			# initiating dialogue takes priority over other interactions
-			if dialogueTriggerEnabled:
-				dialogueOngoing = true
-				GUI.dialogue_start()
-			else:
-				var fireball = FIREBALL.instance()
-				get_parent().add_child(fireball)
-				fireball.set_transform(shotOrigin.get_global_transform().orthonormalized())
-				fireball.set_linear_velocity(shotOrigin.get_global_transform().basis[2].normalized()*100)
-				fireball.add_collision_exception_with(self)
+	if (Input.is_action_just_pressed('player_attack')):
+		var fireball = FIREBALL.instance()
+		get_parent().add_child(fireball)
+		fireball.set_transform(shotOrigin.get_global_transform().orthonormalized())
+		fireball.set_linear_velocity(shotOrigin.get_global_transform().basis[2].normalized()*100)
+		fireball.add_collision_exception_with(self)
 	
 	if (Input.is_action_just_released('net_start_server')):
 		NetworkStartServer()
@@ -158,28 +141,6 @@ func _notification(what):
 		get_tree().set_network_peer(null) # shutdown network
 		get_tree().quit()
 		
-func SetDialogueTarget(target):
-	if not dialogueOngoing:
-		dialogueTarget = target
-		dialogueTriggerEnabled = (target != null)
-		if dialogueTriggerEnabled:
-			GUI.set_interaction_icon('talk')
-		else:
-			GUI.set_interaction_icon('none')
-		DialogueClose()
-		
-func DialogueInteraction(action):
-	var response = dialogueTarget.ProcessDialogue(action)
-	if response['text'] == 'end':
-		DialogueClose()
-		return
-	GUI.dialogue_last_interaction = 'idle'
-	GUI.dialogue_add_response(dialogueTarget.GetPicture(), dialogueTarget.GetActorName(), response['text'], response['replies'])
-
-func DialogueClose():
-	GUI.dialogue_end()
-	dialogueOngoing = false
-
 func NetworkStartServer():
 	get_tree().set_network_peer(null) # shutdown network
 	var peer = NetworkedMultiplayerENet.new()

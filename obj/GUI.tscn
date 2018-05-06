@@ -1,8 +1,9 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://scr/GUI.gd" type="Script" id=1]
 [ext_resource path="res://gfx/gui/healthindicator_01.png" type="Texture" id=2]
 [ext_resource path="res://gfx/gui/dialogue_bg01.png" type="Texture" id=3]
+[ext_resource path="res://font/ufonts.com_bree-regular-opentype.otf" type="DynamicFontData" id=4]
 
 [sub_resource type="SpriteFrames" id=1]
 
@@ -13,6 +14,35 @@ animations = [ {
 "speed": 5.0
 } ]
 _sections_unfolded = [ "Resource" ]
+
+[sub_resource type="Animation" id=3]
+
+resource_name = "dialogue"
+length = 0.2
+loop = true
+step = 0.1
+tracks/0/type = "method"
+tracks/0/path = NodePath("..")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"values": [ {
+"args": [  ],
+"method": "dialogue_increment_display"
+} ]
+}
+
+[sub_resource type="DynamicFont" id=2]
+
+size = 24
+use_mipmaps = true
+use_filter = false
+font_data = ExtResource( 4 )
+_sections_unfolded = [ "Font", "Settings" ]
 
 [node name="GUI" type="Node2D"]
 
@@ -54,10 +84,10 @@ anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_left = 32.0
-margin_top = 665.0
-margin_right = 1578.0
-margin_bottom = 882.0
+margin_left = 40.0
+margin_top = 657.0
+margin_right = 1549.0
+margin_bottom = 856.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 mouse_filter = 2
@@ -69,37 +99,79 @@ patch_margin_left = 3
 patch_margin_top = 3
 patch_margin_right = 3
 patch_margin_bottom = 3
-_sections_unfolded = [ "Axis Stretch", "Margin", "Patch Margin" ]
+_sections_unfolded = [ "Axis Stretch", "Hint", "Patch Margin" ]
 
-[node name="DialogueText" type="RichTextLabel" parent="." index="4"]
+[node name="DialogueText" type="Node" parent="." index="4"]
+
+[node name="TextDisplay" type="AnimationPlayer" parent="DialogueText" index="0"]
+
+root_node = NodePath("..")
+autoplay = "dialogue"
+playback_process_mode = 1
+playback_default_blend_time = 0.0
+playback_speed = 1.0
+anims/dialogue = SubResource( 3 )
+blend_times = [  ]
+_sections_unfolded = [ "Playback Options" ]
+
+[node name="TextShadow" type="RichTextLabel" parent="DialogueText" index="1"]
 
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_left = 46.0
-margin_top = 680.0
-margin_right = 1561.0
-margin_bottom = 868.0
+margin_left = 62.0
+margin_top = 673.0
+margin_right = 1525.0
+margin_bottom = 836.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = true
 mouse_filter = 0
 mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
 size_flags_vertical = 1
-bbcode_enabled = true
+custom_fonts/normal_font = SubResource( 2 )
+custom_colors/default_color = Color( 0, 0, 0, 1 )
+bbcode_enabled = false
 bbcode_text = ""
 visible_characters = -1
 percent_visible = 1.0
 meta_underlined = true
 tab_size = 4
-text = ""
-scroll_active = true
-scroll_following = true
+text = "This is the dialogue text innit"
+scroll_active = false
+scroll_following = false
 selection_enabled = false
 override_selected_font_color = false
-_sections_unfolded = [ "BBCode" ]
+_sections_unfolded = [ "Rect", "custom_colors" ]
 
-[connection signal="meta_clicked" from="DialogueText" to="." method="dialogue_choice"]
+[node name="TextContent" type="RichTextLabel" parent="DialogueText" index="2"]
+
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 60.0
+margin_top = 671.0
+margin_right = 1523.0
+margin_bottom = 834.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = true
+mouse_filter = 0
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 1
+custom_fonts/normal_font = SubResource( 2 )
+bbcode_enabled = false
+bbcode_text = ""
+visible_characters = -1
+percent_visible = 1.0
+meta_underlined = true
+tab_size = 4
+text = "This is the dialogue text innit"
+scroll_active = false
+scroll_following = false
+selection_enabled = false
+override_selected_font_color = false
 
 
