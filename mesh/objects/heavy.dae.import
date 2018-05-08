@@ -7,7 +7,7 @@ path="res://.import/heavy.dae-79edb55374c1724d6db34cd0b8fa589b.scn"
 [deps]
 
 source_file="res://mesh/objects/heavy.dae"
-source_md5="dfe7b086129cb4a0bdf5e0297243f472"
+source_md5="7b0b6ef258644d2c5f8468234f7ed580"
 
 dest_files=[ "res://.import/heavy.dae-79edb55374c1724d6db34cd0b8fa589b.scn" ]
 dest_md5="91fd459b18c54749e6d5f02cc755ca5b"

@@ -6,10 +6,38 @@ extends Node
 
 var DEBUG = false
 
+enum game_states {
+	playing,	# normal gameplay state
+	menu,		# a menu is displayed
+	pause,		# the game is paused
+	gui,		# the player is interacting with the gui
+	dialogue	# the player is in dialogue
+}
+
 # player and game stats are placed here for convenience when saving&loading
-var playerStats = {
+var player_stats = {
 	'name': 'ParticipantAnonymous',
 }
 
+var flags = {}
+
+var game_state
+
 func _ready():
 	DEBUG = OS.is_debug_build()
+	game_state = game_states.playing
+
+func addflags(flag_args):
+	if typeof(flag_args) is TYPE_STRING:	# comma-delimited string
+		flag_args = flag_args.split(',')
+	for flag in flag_args:
+		flags[flag] = false
+
+func setflags(flag_args):
+	if typeof(flag_args) is TYPE_STRING:	# comma-delimited string
+		flag_args = flag_args.split(',')
+	for flag in flag_args:
+		flags[flag] = true
+
+func checkflag(flag):
+	return flags[flag]		
