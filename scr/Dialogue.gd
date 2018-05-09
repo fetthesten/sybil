@@ -21,6 +21,7 @@ enum statuses {
 #	- op:		operation for set/get/check, can be gt lt eq or combination (comparison), inc, dec, set (assignment) (default is gt and inc respectively)
 
 enum types {
+	start,		# a starting node
 	text,		# just text, or pipe-delimited choices for choice_mul nodes (does nothing for yes/no or end nodes)
 	choice_yn,	# make the player decide between yes or no
 	choice_mul,	# make the player decide between several different custom options
@@ -36,8 +37,10 @@ enum types {
 }
 
 # dialogue node graph dict
+# todo: support more than one dialogue graph
 
 var nodes = {}
+var current_node
 
 func _ready():
 	# load a dialogue file and initialize nodes
@@ -55,6 +58,11 @@ func _ready():
 func _process(delta):
 	pass
 
+func dialogue_initiate(script):
+	# todo: find script
+
+func dialogue_process():
+	
 
 func dialogue_increment():
 #	if dialogue_current_index <= dialogue_current_string.length():
