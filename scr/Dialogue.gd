@@ -21,7 +21,7 @@ enum statuses {
 #	- op:		operation for set/get/check, can be gt lt eq or combination (comparison), inc, dec, set (assignment) (default is gt and inc respectively)
 
 enum types {
-	start,		# a starting node
+	start,		# a starting node, this needs to be called "start"
 	text,		# just text, or pipe-delimited choices for choice_mul nodes (does nothing for yes/no or end nodes)
 	choice_yn,	# make the player decide between yes or no
 	choice_mul,	# make the player decide between several different custom options
@@ -39,16 +39,22 @@ enum types {
 # dialogue node graph dict
 # todo: support more than one dialogue graph
 
-var nodes = {}
+var scripts = {}
+var current_script
 var current_node
+var dialogue_initiated = false
 
 func _ready():
+	# hide dialogue panel
+	gui_hide_dialogue_panel()
+	
 	# load a dialogue file and initialize nodes
 	var file = File.new()
 	file.open("res://dat/dialogue/test_dialogue_2.js", file.READ)
 	var dat = JSON.parse(file.get_as_text())
 	file.close() 
-
+	print(dat)
+	
 #	if dat.error == 0:
 #		nodes = dat.result['nodes']
 #		#picture = load(dat.result['picture'])
@@ -56,13 +62,39 @@ func _ready():
 #		Main.addflags(dat.result['flags'])
 
 func _process(delta):
-	pass
+	# processes a dialogue graph if dialogue is initiated
+	# current_node needs to be set by dialogue_initiate before doing this
+	if dialogue_initiated:
+		if typeof(current_node) == TYPE_OBJECT:
+			# node is currently being processed
+			current_node = current_node.resume()
+		else:
+			# done processing, get next node
+			process_node(scripts[current_script][current_node])
 
 func dialogue_initiate(script):
-	# todo: find script
-
-func dialogue_process():
+	# triggers dialogue processing
+	dialogue_initiated = true
+	current_script = script
+	current_node = scripts[script]['start']
+	pass
 	
+func dialogue_end():
+	# ends dialogue and stops processing
+	dialogue_initiated = false
+	pass
+
+func dialogue_process_node(node):	
+	# yields progression through a node and returns next node id when done
+	match node.type:
+		types.start:
+			# starting node of script, used as nothing more than a placeholder - just find the next node
+			return node.next
+
+func gui_hide_dialogue_panel():
+	$TextShadow.hide()
+	$TextContent.hide()
+	$GUI/DialogueBackground.hide()
 
 func dialogue_increment():
 #	if dialogue_current_index <= dialogue_current_string.length():

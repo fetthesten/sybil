@@ -8,11 +8,12 @@ var DEBUG = false
 
 enum game_states {
 	playing,	# normal gameplay state
-	menu,		# a menu is displayed
 	pause,		# the game is paused
-	gui,		# the player is interacting with the gui
+	inventory,	# the player is interacting with the gui
 	dialogue	# the player is in dialogue
 }
+
+var menu_enabled = false
 
 # player and game stats are placed here for convenience when saving&loading
 var player_stats = {
